@@ -8,6 +8,6 @@ class CurrentUserIsNotAdmin extends CurrentUserCan implements ContextFilterInter
 {
     public function __invoke(): bool
     {
-        return self::check('manage_options') === false;
+        return CurrentUserCan::check('manage_options') === false;
     }
 }

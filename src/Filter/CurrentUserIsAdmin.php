@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
-class CurrentUserIsAdmin extends CurrentUserCan implements ContextFilterInterface
+class CurrentUserIsAdmin implements ContextFilterInterface
 {
     public function __invoke(): bool
     {
-        return self::check('manage_options');
+        return CurrentUserCan::check('manage_options');
     }
 }
