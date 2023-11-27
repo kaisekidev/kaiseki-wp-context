@@ -9,10 +9,10 @@ use function basename;
 use function in_array;
 use function is_string;
 
-final class IsPageTemplateFileName implements ContextFilterInterface
+class IsPageTemplateFileName implements ContextFilterInterface
 {
     /** @var array<string> */
-    private array $fileNames;
+    protected array $fileNames;
 
     public function __construct(string ...$fileNames)
     {
@@ -23,6 +23,16 @@ final class IsPageTemplateFileName implements ContextFilterInterface
     }
 
     public function __invoke(): bool
+    {
+        return self::check(...$this->fileNames);
+    }
+
+    /**
+     * @param string ...$fileNames
+     *
+     * @return bool
+     */
+    public static function check(string ...$fileNames): bool
     {
         if (!is_page()) {
             return false;
@@ -36,6 +46,6 @@ final class IsPageTemplateFileName implements ContextFilterInterface
 
         $templateFileName = basename($templateSlug, '.php');
 
-        return in_array($templateFileName, $this->fileNames, true);
+        return in_array($templateFileName, $fileNames, true);
     }
 }

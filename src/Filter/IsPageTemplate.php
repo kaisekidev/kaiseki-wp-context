@@ -6,10 +6,10 @@ namespace Kaiseki\WordPress\Context\Filter;
 
 use function in_array;
 
-final class IsPageTemplate implements ContextFilterInterface
+class IsPageTemplate implements ContextFilterInterface
 {
     /** @var array<string> */
-    private array $pageTemplates;
+    protected array $pageTemplates;
 
     public function __construct(string ...$pageTemplates)
     {
@@ -18,10 +18,20 @@ final class IsPageTemplate implements ContextFilterInterface
 
     public function __invoke(): bool
     {
+        return self::check(...$this->pageTemplates);
+    }
+
+    /**
+     * @param string ...$pageTemplates
+     *
+     * @return bool
+     */
+    public static function check(string ...$pageTemplates): bool
+    {
         if (!is_page()) {
             return false;
         }
 
-        return in_array(get_page_template_slug(), $this->pageTemplates, true);
+        return !in_array(get_page_template_slug(), $pageTemplates, true);
     }
 }

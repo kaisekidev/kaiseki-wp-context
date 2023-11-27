@@ -7,13 +7,18 @@ namespace Kaiseki\WordPress\Context\Filter;
 use function array_map;
 use function in_array;
 
-final class ContentContainsBlock implements ContextFilterInterface
+class ContentContainsBlock implements ContextFilterInterface
 {
-    public function __construct(private readonly string $name, private readonly string $namespace = '')
+    public function __construct(protected readonly string $name, protected readonly string $namespace = '')
     {
     }
 
     public function __invoke(): bool
+    {
+        return self::check($this->name, $this->namespace);
+    }
+
+    public static function check(string $name, string $namespace = ''): bool
     {
         $post = get_post();
 
@@ -22,7 +27,7 @@ final class ContentContainsBlock implements ContextFilterInterface
         }
 
         \Safe\preg_match_all(
-            '/<!--\s+(?P<closer>\/)?wp:(?P<namespace>[a-z][a-z0-9_-]*\/)?(?P<name>' . $this->name . ')/',
+            '/<!--\s+(?P<closer>\/)?wp:(?P<namespace>[a-z][a-z0-9_-]*\/)?(?P<name>' . $name . ')/',
             $post->post_content,
             $matches
         );
@@ -31,7 +36,7 @@ final class ContentContainsBlock implements ContextFilterInterface
             return false;
         }
 
-        if ($this->namespace === '') {
+        if ($namespace === '') {
             return true;
         }
 
@@ -40,6 +45,6 @@ final class ContentContainsBlock implements ContextFilterInterface
             $matches['namespace']
         );
 
-        return in_array($this->namespace, $namespaces, true);
+        return in_array($namespace, $namespaces, true);
     }
 }

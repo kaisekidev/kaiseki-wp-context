@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
-final class ContextFilterPipeline implements ContextFilterInterface
+class ContextFilterPipeline implements ContextFilterInterface
 {
     /** @var array<ContextFilterInterface> */
-    private array $filter;
+    protected array $filter;
 
     public function __construct(ContextFilterInterface ...$filter)
     {
