@@ -7,16 +7,16 @@ namespace Kaiseki\WordPress\Context\Filter;
 class ContextFilterPipeline implements ContextFilterInterface
 {
     /** @var array<ContextFilterInterface> */
-    protected array $filter;
+    protected array $filters;
 
-    public function __construct(ContextFilterInterface ...$filter)
+    public function __construct(ContextFilterInterface ...$filters)
     {
-        $this->filter = $filter;
+        $this->filters = $filters;
     }
 
     public function __invoke(): bool
     {
-        foreach ($this->filter as $filter) {
+        foreach ($this->filters as $filter) {
             if (($filter)() === false) {
                 return false;
             }
