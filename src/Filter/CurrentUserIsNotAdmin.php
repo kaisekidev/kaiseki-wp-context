@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
-class CurrentUserIsNotAdmin extends CurrentUserCan implements ContextFilterInterface
+class CurrentUserIsNotAdmin implements ContextFilterInterface
 {
     public function __invoke(): bool
     {
