@@ -6,8 +6,8 @@ namespace Kaiseki\WordPress\Context\Filter;
 
 class IsNotPageTemplate extends IsPageTemplate implements ContextFilterInterface
 {
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
-        return self::check(...$this->pageTemplates) === false;
+        return self::check($this->pageTemplate, $post) === false;
     }
 }

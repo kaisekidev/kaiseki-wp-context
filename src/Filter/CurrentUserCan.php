@@ -10,13 +10,15 @@ class CurrentUserCan implements ContextFilterInterface
     {
     }
 
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
-        return self::check($this->capability);
+        return self::check($this->capability, $post);
     }
 
-    public static function check(string $capability): bool
+    public static function check(string $capability, ?\WP_Post $post = null): bool
     {
-        return current_user_can($capability);
+        return $post === null
+            ? current_user_can($capability)
+            : current_user_can($capability, $post->ID);
     }
 }

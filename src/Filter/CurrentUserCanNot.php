@@ -6,8 +6,8 @@ namespace Kaiseki\WordPress\Context\Filter;
 
 class CurrentUserCanNot extends CurrentUserCan implements ContextFilterInterface
 {
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
-        return self::check($this->capability) === false;
+        return self::check($this->capability, $post) === false;
     }
 }

@@ -13,14 +13,14 @@ class ContentContainsBlock implements ContextFilterInterface
     {
     }
 
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
         return self::check($this->name, $this->namespace);
     }
 
-    public static function check(string $name, string $namespace = ''): bool
+    public static function check(string $name, string $namespace = '', ?\WP_Post $post = null): bool
     {
-        $post = get_post();
+        $post = $post ?? get_post();
 
         if (!($post instanceof \WP_Post)) {
             return false;

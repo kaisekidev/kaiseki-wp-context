@@ -14,10 +14,10 @@ class ContextFilterPipeline implements ContextFilterInterface
         $this->filters = $filters;
     }
 
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
         foreach ($this->filters as $filter) {
-            if (($filter)() === false) {
+            if (($filter)($post) === false) {
                 return false;
             }
         }

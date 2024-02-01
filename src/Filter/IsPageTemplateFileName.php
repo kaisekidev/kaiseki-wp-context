@@ -4,48 +4,33 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
-use function array_map;
 use function basename;
-use function in_array;
 use function is_string;
 
 class IsPageTemplateFileName implements ContextFilterInterface
 {
-    /** @var array<string> */
-    protected array $fileNames;
-
-    public function __construct(string ...$fileNames)
+    public function __construct(protected readonly string $fileName)
     {
-        $this->fileNames = array_map(
-            static fn (string $fileName): string => basename($fileName, '.php'),
-            $fileNames
-        );
     }
 
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
-        return self::check(...$this->fileNames);
+        return self::check($this->fileName, $post);
     }
 
-    /**
-     * @param string ...$fileNames
-     *
-     * @return bool
-     */
-    public static function check(string ...$fileNames): bool
+    public static function check(string $fileName, ?\WP_Post $post = null): bool
     {
-        if (!is_page()) {
+        // @phpstan-ignore-next-line
+        if (!is_page($post)) {
             return false;
         }
 
-        $templateSlug = get_page_template_slug();
+        $templateSlug = get_page_template_slug($post);
 
         if (!is_string($templateSlug) || $templateSlug === '') {
             return false;
         }
 
-        $templateFileName = basename($templateSlug, '.php');
-
-        return in_array($templateFileName, $fileNames, true);
+        return basename($templateSlug, '.php') === basename($fileName, '.php');
     }
 }

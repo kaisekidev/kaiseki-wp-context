@@ -4,34 +4,30 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
-use function in_array;
-
 class IsPageTemplate implements ContextFilterInterface
 {
-    /** @var array<string> */
-    protected array $pageTemplates;
-
-    public function __construct(string ...$pageTemplates)
+    public function __construct(protected readonly string $pageTemplate)
     {
-        $this->pageTemplates = $pageTemplates;
     }
 
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
-        return self::check(...$this->pageTemplates);
+        return self::check($this->pageTemplate, $post);
     }
 
     /**
-     * @param string ...$pageTemplates
+     * @param string    $pageTemplate
+     * @param ?\WP_Post $post
      *
      * @return bool
      */
-    public static function check(string ...$pageTemplates): bool
+    public static function check(string $pageTemplate, ?\WP_Post $post = null): bool
     {
-        if (!is_page()) {
+        // @phpstan-ignore-next-line
+        if (!is_page($post)) {
             return false;
         }
 
-        return !in_array(get_page_template_slug(), $pageTemplates, true);
+        return get_page_template_slug($post) === $pageTemplate;
     }
 }

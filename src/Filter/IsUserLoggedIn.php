@@ -6,7 +6,7 @@ namespace Kaiseki\WordPress\Context\Filter;
 
 class IsUserLoggedIn implements ContextFilterInterface
 {
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
         return self::check();
     }

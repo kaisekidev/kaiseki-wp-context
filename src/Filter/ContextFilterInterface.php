@@ -6,5 +6,5 @@ namespace Kaiseki\WordPress\Context\Filter;
 
 interface ContextFilterInterface
 {
-    public function __invoke(): bool;
+    public function __invoke(?\WP_Post $post = null): bool;
 }

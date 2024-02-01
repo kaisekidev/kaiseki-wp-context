@@ -4,31 +4,25 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
-use function in_array;
-
 class IsPostType implements ContextFilterInterface
 {
-    /** @var array<string> */
-    protected array $postTypes;
-
-    public function __construct(string ...$postTypes)
+    public function __construct(protected readonly string $postType)
     {
-        $this->postTypes = $postTypes;
     }
 
-    public function __invoke(): bool
+    public function __invoke(?\WP_Post $post = null): bool
     {
-        return self::check(...$this->postTypes);
+        return self::check($this->postType, $post);
     }
 
-    public static function check(string ...$postTypes): bool
+    public static function check(string $postType, ?\WP_Post $post = null): bool
     {
-        $post = get_post();
+        $post = $post ?? get_post();
 
         if ($post === null) {
             return false;
         }
 
-        return in_array($post->post_type, $postTypes, true);
+        return $post->post_type === $postType;
     }
 }
