@@ -20,6 +20,13 @@ class IsPageTemplateFileName implements ContextFilterInterface
 
     public static function check(string $fileName, ?\WP_Post $post = null): bool
     {
+        if (
+            ($post === null && !is_page())
+            || ($post !== null && $post->post_type !== 'page')
+        ) {
+            return false;
+        }
+
         $templateSlug = get_page_template_slug($post);
 
         if (!is_string($templateSlug) || $templateSlug === '') {

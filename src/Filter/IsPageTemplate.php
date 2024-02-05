@@ -23,6 +23,13 @@ class IsPageTemplate implements ContextFilterInterface
      */
     public static function check(string $pageTemplate, ?\WP_Post $post = null): bool
     {
+        if (
+            ($post === null && !is_page())
+            || ($post !== null && $post->post_type !== 'page')
+        ) {
+            return false;
+        }
+
         return get_page_template_slug($post) === $pageTemplate;
     }
 }
