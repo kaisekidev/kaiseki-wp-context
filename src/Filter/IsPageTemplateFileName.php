@@ -20,11 +20,6 @@ class IsPageTemplateFileName implements ContextFilterInterface
 
     public static function check(string $fileName, ?\WP_Post $post = null): bool
     {
-        // @phpstan-ignore-next-line
-        if (!is_page($post)) {
-            return false;
-        }
-
         $templateSlug = get_page_template_slug($post);
 
         if (!is_string($templateSlug) || $templateSlug === '') {
