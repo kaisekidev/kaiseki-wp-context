@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\Context\Filter;
 
+use WP_Post;
+
 class ContextFilterPipeline implements ContextFilterInterface
 {
     /** @var array<ContextFilterInterface> */
@@ -14,13 +16,14 @@ class ContextFilterPipeline implements ContextFilterInterface
         $this->filters = $filters;
     }
 
-    public function __invoke(?\WP_Post $post = null): bool
+    public function __invoke(?WP_Post $post = null): bool
     {
         foreach ($this->filters as $filter) {
             if (($filter)($post) === false) {
                 return false;
             }
         }
+
         return true;
     }
 }
