@@ -6,9 +6,10 @@ namespace Kaiseki\WordPress\Context\Filter;
 
 use WP_Post;
 
-use function array_map;
 use function get_post;
 use function in_array;
+use function is_array;
+use function is_string;
 use function untrailingslashit;
 
 class ContentContainsBlock implements ContextFilterInterface
@@ -44,10 +45,15 @@ class ContentContainsBlock implements ContextFilterInterface
             return true;
         }
 
-        $namespaces = array_map(
-            static fn(string $namespace): string => untrailingslashit($namespace),
-            $matches['namespace']
-        );
+        $namespaceMatches = $matches['namespace'] ?? [];
+        $namespaces = [];
+        if (is_array($namespaceMatches)) {
+            foreach ($namespaceMatches as $match) {
+                if (is_string($match)) {
+                    $namespaces[] = untrailingslashit($match);
+                }
+            }
+        }
 
         return in_array($namespace, $namespaces, true);
     }

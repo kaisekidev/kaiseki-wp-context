@@ -1,0 +1,27 @@
+{
+    "symbol-whitelist" : [
+        "null", "true", "false",
+        "static", "self", "parent",
+        "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object", "mixed",
+        "WP_Post",
+        "current_user_can",
+        "get_option",
+        "get_page_template_slug",
+        "get_post",
+        "is_front_page",
+        "is_page",
+        "is_user_logged_in",
+        "untrailingslashit",
+        "wp_get_current_user"
+    ],
+    "php-core-extensions" : [
+        "Core",
+        "date",
+        "pcre",
+        "Phar",
+        "Reflection",
+        "SPL",
+        "standard"
+    ],
+    "scan-files": []
+}
